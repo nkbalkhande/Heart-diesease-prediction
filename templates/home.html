@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <title>Heart Disease Prediction System</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .content-wrapper {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            margin: 0 auto;
+            text-align: center;
+            max-width: 1200px;
+            flex: 1;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        .bg-section {
+            background-image: url("{{ url_for('static', filename='images/heart.jpg') }}");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 80vh;
+            padding: 0;
+            color: #fff;
+            text-align: center;
+            display: flex;
+            align-items: flex-start;
+            justify-content: flex-start;
+            flex-direction: column;
+        }
+
+        .bg-section p {
+            background-color: rgba(0, 0, 0, 0.6);
+            padding: 20px;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            margin: 0;
+            width: 100%;
+            text-align: center;
+        }
+
+        h1 {
+            margin: 20px 0;
+            font-size: 2.5rem;
+            color: #444;
+        }
+
+        nav {
+            margin: 20px 0;
+        }
+
+        nav a {
+            margin: 0 15px;
+            text-decoration: none;
+            color: #444;
+            font-weight: bold;
+            position: relative;
+        }
+
+        nav a::before {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: #444;
+            visibility: hidden;
+            transform: scaleX(0);
+            transition: all 0.3s ease-in-out;
+        }
+
+        nav a:hover::before {
+            visibility: visible;
+            transform: scaleX(1);
+        }
+
+        footer {
+            background-color: black;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            width: 100%;
+            position: relative;
+            bottom: 0;
+        }
+
+        p {
+            margin: 10px 0;
+            font-size: 1.1rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="content-wrapper">
+        <h1>Welcome to Heart Disease Prediction System</h1>
+        <nav>
+            <a href="/">Home</a> |
+            <a href="/about">About Us</a> |
+            <a href="/contact">Contact Us</a> |
+            <a href="/predict">Predict</a>
+        </nav>
+    </div>
+
+    <div class="bg-section">
+        <p>Our Heart Disease Prediction System uses advanced machine learning algorithms to evaluate your risk of heart
+            disease based on various health parameters. Get started now to take control of your heart health! Early
+            detection can help prevent serious heart conditions. Our system analyzes your data and provides accurate
+            predictions to help you make informed decisions. Simply enter your health details, and our system will do
+            the rest. Your privacy is our priority, and all data is securely processed. Our goal is to empower
+            individuals with knowledge about their heart health. Take a step towards a healthier future today. Join
+            thousands of users who trust our system for reliable heart disease predictions and personalized health
+            advice.</p>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Heart Disease Prediction System. All rights reserved.</p>
+    </footer>
+</body>
+
+</html>

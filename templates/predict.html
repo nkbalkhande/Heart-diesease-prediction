@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <title>Heart Disease Prediction</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 50px;
+        }
+
+        h1 {
+            background-color: black;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        form {
+            max-width: 500px;
+            margin: auto;
+        }
+
+        label,
+        input,
+        select {
+            display: block;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        select {
+            padding: 10px;
+        }
+
+        input[type="submit"] {
+            background-color: blue;
+            color: white;
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: darkblue;
+        }
+
+        .error {
+            color: red;
+            text-align: center;
+        }
+
+        .prediction {
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .form-section {
+            display: none;
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0, 0, 0);
+            background-color: rgba(0, 0, 0, 0.4);
+            padding-top: 60px;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+            text-align: center;
+        }
+
+        .close-btn {
+            background-color: blue;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .close-btn:hover {
+            background-color: darkblue;
+        }
+    </style>
+    <script>
+        function showFormSection() {
+            var modelChoice = document.getElementById('model_choice').value;
+            var formSection = document.getElementById('form-section');
+            var predictionResult = document.getElementById('prediction-result');
+            var errorResult = document.getElementById('error-result');
+
+            if (modelChoice) {
+                formSection.style.display = 'block';
+            } else {
+                formSection.style.display = 'none';
+            }
+
+            // Clear the previous prediction and error results
+            predictionResult.innerHTML = '';
+            errorResult.innerHTML = '';
+        }
+
+        function showModal(content, color) {
+            var modal = document.getElementById('resultModal');
+            var modalContent = document.getElementById('modal-content');
+            modalContent.innerHTML = `<p style="color: ${color}">${content}</p><button class="close-btn" onclick="closeModal()">OK</button>`;
+            modal.style.display = "block";
+        }
+
+        function closeModal() {
+            var modal = document.getElementById('resultModal');
+            modal.style.display = "none";
+        }
+
+        window.onclick = function (event) {
+            var modal = document.getElementById('resultModal');
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
+</head>
+
+<body>
+    <h1>Heart Disease Prediction</h1>
+    <nav>
+        <a href="/">Home</a> |
+        <a href="/about">About Us</a> |
+        <a href="/contact">Contact Us</a> |
+        <a href="/predict">Predict</a>
+    </nav>
+    <form method="post" action="/predict">
+        <label for="model_choice">Choose Prediction Model:</label>
+        <select id="model_choice" name="model_choice" onchange="showFormSection()">
+            <option value="">Select a model</option>
+            <option value="Naive Bayes">Naive Bayes</option>
+            <option value="decision_tree">Decision Tree</option>
+            <option value="random_forest">Random Forest</option>
+
+        </select>
+
+        <div id="form-section" class="form-section">
+            <label for="age">Enter Your Age:</label>
+            <input type="number" id="age" name="age" required>
+
+            <label for="gender">Male (1) or Female (0):</label>
+            <input type="number" id="gender" name="gender" required>
+
+            <label for="cp">Chest Pain Type (CP):</label>
+            <input type="number" id="cp" name="cp" required>
+
+            <label for="trestbps">Resting Blood Pressure (trestbps):</label>
+            <input type="number" id="trestbps" name="trestbps" required>
+
+            <label for="chol">Cholesterol (chol):</label>
+            <input type="number" id="chol" name="chol" required>
+
+            <label for="fbs">Fasting Blood Sugar (fbs):</label>
+            <input type="number" id="fbs" name="fbs" required>
+
+            <label for="restecg">Resting ECG Result (restecg):</label>
+            <input type="number" id="restecg" name="restecg" required>
+
+            <label for="thalach">Maximum Heart Rate (thalach):</label>
+            <input type="number" id="thalach" name="thalach" required>
+
+            <label for="exang">Exercise Induced Angina (exang):</label>
+            <input type="number" id="exang" name="exang" required>
+
+            <label for="oldpeak">ST Depression (oldpeak):</label>
+            <input type="text" id="oldpeak" name="oldpeak" required>
+
+            <label for="slope">Slope of ST Segment (slope):</label>
+            <input type="number" id="slope" name="slope" required>
+
+            <label for="ca">Number of Major Vessels (ca):</label>
+            <input type="number" id="ca" name="ca" required>
+
+            <label for="thal">Thalassemia (thal):</label>
+            <input type="number" id="thal" name="thal" required>
+
+            <input type="submit" value="Predict">
+        </div>
+    </form>
+
+    <div id="error-result" class="error">
+        {% if error %}
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                showModal('{{ error }}', 'red');
+            });
+        </script>
+        {% endif %}
+    </div>
+
+    <div id="prediction-result" class="prediction">
+        {% if prediction %}
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                showModal('{{ prediction }}', '{{ color }}');
+            });
+        </script>
+        {% endif %}
+    </div>
+
+    <!-- The Modal -->
+    <div id="resultModal" class="modal">
+        <!-- Modal content -->
+        <div class="modal-content">
+            <div id="modal-content"></div>
+        </div>
+    </div>
+</body>
+
+</html>
